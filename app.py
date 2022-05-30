@@ -18,6 +18,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 # Creating an SQLAlchemy instance
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+
 # Models
 class Profile(db.Model):
     # Id : Field which stores unique id for every row in
@@ -41,7 +43,9 @@ class Profile(db.Model):
 
 @app.route('/')
 def index():
-	return render_template('home.html')
+    return render_template('home.html')
+
+
 @app.route('/Page-1.html')
 def page():
     return render_template('Page-1.html')
@@ -68,12 +72,13 @@ def profile():
         db.session.add(p)
         db.session.commit()
         conn = sqlite3.connect('bom.db')
-        cursor = conn.execute("select scheme from data where gender1=?", (gender,))
+        cursor = conn.execute("select scheme from data where (gender1=? or gender1 is NULL) and (caste1=? or caste1 is NULL) and (minority1=? or minority1 is NULL) and (? between age_min and age_max or age_min is NULL or age_max is NULL) and (?<=income1 or income1 is NULL)", (gender, caste, minority, age, income,))
         result = cursor.fetchall()
         conn.close()
         return render_template('/Page-2.html', result=result)
     else:
         return redirect('/')
+
 
 if __name__ == '__main__':
     app.run()
