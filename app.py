@@ -61,7 +61,6 @@ def profile():
     caste = request.form.get("caste")
     minority = request.form.get("minority")
     income = request.form.get("income")
-
     # create an object of the Profile class of models
     # and store data as a row in our datatable
     if name != '':
@@ -70,20 +69,11 @@ def profile():
         db.session.commit()
         conn = sqlite3.connect('bom.db')
         cursor = conn.execute("select scheme from data where gender1=?", (gender,))
-        s = "<table style='border:1px solid red'>"
-        for row in cursor:
-            s = s + "<tr>"
-        for x in row:
-            s = s + "<td>" + str(x) + "</td>"
-        s = s + "</tr>"
-
-
-        return render_template('Page-2.html', cursor=cursor)
+        result = cursor.fetchall()
+        conn.close()
+        return render_template('/Page-2.html', result=result)
     else:
         return redirect('/')
-
-
-
 
 if __name__ == '__main__':
     app.run()
