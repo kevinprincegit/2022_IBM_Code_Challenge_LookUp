@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Index Page</title>
+</head>
+<body>
+
+	<table>
+		<thead>
+			<th>Scheme</th>
+		</thead>
+		{% for row in cursor %}
+		<tbody>
+			<td>{{row[0]}}</td>
+		</tbody>
+		{% endfor%}
+	</table>
+</body>
+</html>
